@@ -1,4 +1,11 @@
-import { Contact, Megaphone, MessageCircleMore } from "lucide-react";
+import {
+  Contact,
+  LucideProps,
+  Megaphone,
+  MessageCircleMore,
+  MonitorCloud,
+  MonitorSmartphone,
+} from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
 import {
@@ -13,32 +20,47 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useEffect } from "react";
+import { ForwardRefExoticComponent, RefAttributes, useEffect } from "react";
 
-// This is sample data.
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  menus: [
-    {
-      name: "Conversation",
-      url: "/conversation",
-      icon: MessageCircleMore,
-    },
-    {
-      name: "Contact",
-      url: "/contact",
-      icon: Contact,
-    },
-    {
-      name: "Campaign",
-      url: "/campaign",
-      icon: Megaphone,
-    },
-  ],
+  menu: {
+    dashboard: [
+      {
+        name: "Dashboard",
+        url: "/",
+        icon: MonitorCloud,
+      },
+    ],
+    omnichannel: [
+      {
+        name: "Conversation",
+        url: "/conversation",
+        icon: MessageCircleMore,
+      },
+      {
+        name: "Contact",
+        url: "/contact",
+        icon: Contact,
+      },
+      {
+        name: "Campaign",
+        url: "/campaign",
+        icon: Megaphone,
+      },
+    ],
+    setting: [
+      {
+        name: "Whatsapp Gateway",
+        url: "/setting/whatsapp",
+        icon: MonitorSmartphone,
+      },
+    ],
+  },
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -75,26 +97,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <SidebarMenu>
-          <SidebarMenuItem className="mx-2">
-            <SidebarGroupLabel>Omnichannel</SidebarGroupLabel>
-            <SidebarMenu>
-              {data.menus.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.name}
-                    className="py-5 px-3"
-                  >
-                    <a href={item.url}>
-                      <item.icon />
-                      <span className="group-data-[collapsible=icon]:hidden">
-                        {item.name}
-                      </span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+          <SidebarMenuItem className="mx-2 space-y-4">
+            <Menu title="Dashboard" menus={data.menu.dashboard} />
+            <Menu title="Omnichannel" menus={data.menu.omnichannel} />
+            <Menu title="Setting" menus={data.menu.setting} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
@@ -106,3 +112,91 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     </Sidebar>
   );
 }
+
+function Menu({
+  title,
+  menus,
+}: {
+  title: string;
+  menus: {
+    name: string;
+    url: string;
+    icon: ForwardRefExoticComponent<
+      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+    >;
+  }[];
+}) {
+  return (
+    <div>
+      <SidebarGroupLabel>{title}</SidebarGroupLabel>
+      <SidebarMenu>
+        {menus.map((item) => (
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton
+              asChild
+              tooltip={item.name}
+              className="py-5 px-3"
+            >
+              <a href={item.url}>
+                <item.icon />
+                <span className="group-data-[collapsible=icon]:hidden">
+                  {item.name}
+                </span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </div>
+  );
+}
+
+// function CollapsibleMenu({
+//   item,
+//   defaultOpen = true,
+// }: {
+//   item: {
+//     title: string;
+//     items: {
+//       title: string;
+//       url: string;
+//       isActive?: boolean;
+//     }[];
+//   };
+//   defaultOpen?: boolean;
+// }) {
+//   return (
+//     <Collapsible
+//       key={item.title}
+//       title={item.title}
+//       defaultOpen={defaultOpen}
+//       className="group/collapsible"
+//     >
+//       <SidebarGroup>
+//         <SidebarGroupLabel
+//           asChild
+//           className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm"
+//         >
+//           <CollapsibleTrigger>
+//             {item.title}
+//             <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90 text-inherit" />
+//           </CollapsibleTrigger>
+//         </SidebarGroupLabel>
+
+//         <CollapsibleContent>
+//           <SidebarGroupContent>
+//             <SidebarMenu>
+//               {item.items.map((sub) => (
+//                 <SidebarMenuItem key={sub.title}>
+//                   <SidebarMenuButton asChild isActive={sub.isActive}>
+//                     <a href={sub.url}>{sub.title}</a>
+//                   </SidebarMenuButton>
+//                 </SidebarMenuItem>
+//               ))}
+//             </SidebarMenu>
+//           </SidebarGroupContent>
+//         </CollapsibleContent>
+//       </SidebarGroup>
+//     </Collapsible>
+//   );
+// }
