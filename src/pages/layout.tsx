@@ -2,7 +2,7 @@ import { useApi } from "@/api/api";
 import { checkTokenApi } from "@/api/endpoints/auth";
 import service from "@/api/service";
 import { AppSidebar } from "@/components/app-sidebar";
-import LoadingPage from "@/components/LoadingPage";
+import LoadingPage from "@/components/loading-page";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -71,8 +71,9 @@ export default function Layout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        {/* <header className="flex h-16 shrink-0 items-center shadow bg-white gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header className="flex h-16 shrink-0 items-center shadow bg-white gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
@@ -87,7 +88,7 @@ export default function Layout() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
-        </header> */}
+        </header>
         <div className="p-6">
           <Outlet />
         </div>

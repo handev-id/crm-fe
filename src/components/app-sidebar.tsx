@@ -23,6 +23,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ForwardRefExoticComponent, RefAttributes, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const data = {
   user: {
@@ -133,6 +134,7 @@ function Menu({
     >;
   }[];
 }) {
+  const pathName = useLocation().pathname;
   return (
     <div>
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
@@ -143,6 +145,7 @@ function Menu({
               asChild
               tooltip={item.name}
               className="py-5 px-3"
+              isActive={pathName === item.url}
             >
               <a href={item.url}>
                 <item.icon />

@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./pages/Layout";
+import Layout from "./pages/layout";
 import Login from "./pages/auth/login";
 import Dashboard from "./pages/dashboard";
+import Conversation from "./pages/conversation";
 
 export default function App() {
   return (
@@ -18,6 +19,10 @@ export default function App() {
             {
               path: "",
               element: <Dashboard />,
+            },
+            {
+              path: "conversation",
+              element: <Conversation />,
             },
           ],
         },
