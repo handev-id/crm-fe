@@ -5,6 +5,7 @@ import {
   MessageCircleMore,
   MonitorCloud,
   MonitorSmartphone,
+  UserPlus,
 } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
@@ -18,6 +19,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ForwardRefExoticComponent, RefAttributes, useEffect } from "react";
@@ -59,6 +61,11 @@ const data = {
         url: "/setting/whatsapp",
         icon: MonitorSmartphone,
       },
+      {
+        name: "User",
+        url: "/setting/user",
+        icon: UserPlus,
+      },
     ],
   },
 };
@@ -68,7 +75,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   useEffect(() => {
     if (sidebar.open) {
-      sidebar.toggleSidebar();
+      sidebar.setOpen(false);
     }
   }, []);
   return (
@@ -85,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" className="justify-start">
-              <div className="size-7 rounded-md bg-primary" />
+              <SidebarTrigger />
               <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                 <span className="text-base font-bold">CentraChannel</span>
                 <span className="text-xs text-muted-foreground">Plan</span>
