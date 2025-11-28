@@ -19,11 +19,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarTrigger,
-  useSidebar,
 } from "@/components/ui/sidebar";
-import { ForwardRefExoticComponent, RefAttributes, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const data = {
   user: {
@@ -72,13 +70,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const sidebar = useSidebar();
-
-  useEffect(() => {
-    if (sidebar.open) {
-      sidebar.setOpen(false);
-    }
-  }, []);
   return (
     <Sidebar
       style={
@@ -93,7 +84,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" className="justify-start">
-              <SidebarTrigger />
+              <div className="bg-primary w-10 h-10 rounded-full" />
               <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                 <span className="text-base font-bold">CentraChannel</span>
                 <span className="text-xs text-muted-foreground">Plan</span>
@@ -147,12 +138,12 @@ function Menu({
               className="py-5 px-3"
               isActive={pathName === item.url}
             >
-              <a href={item.url}>
+              <Link to={item.url}>
                 <item.icon />
                 <span className="group-data-[collapsible=icon]:hidden">
                   {item.name}
                 </span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
