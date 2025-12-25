@@ -5,5 +5,12 @@ export type PaginatedResponse<T> = {
 
 type Meta = {
   total: number;
-  page: number;
+  perPage: number;
+  currentPage: number;
+  lastPage: number;
+  firstPage: number;
+  firstPageUrl: string;
+  lastPageUrl: string;
+  nextPageUrl?: string;
+  previousPageUrl?: string;
 };

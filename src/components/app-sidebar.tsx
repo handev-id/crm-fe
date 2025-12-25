@@ -1,4 +1,5 @@
 import {
+  Bell,
   Contact,
   LucideProps,
   Megaphone,
@@ -6,6 +7,7 @@ import {
   MonitorCloud,
   MonitorSmartphone,
   UserPlus,
+  UserRound,
 } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
@@ -22,13 +24,9 @@ import {
 } from "@/components/ui/sidebar";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { User } from "@/api/models/user";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   menu: {
     dashboard: [
       {
@@ -69,7 +67,14 @@ const data = {
   },
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface Props {
+  user: User;
+  onLogout: () => void;
+}
+
+export function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar> & Props) {
   return (
     <Sidebar
       style={
@@ -105,7 +110,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={props.user}
+          menus={[
+            {
+              title: "Account",
+              icon: UserRound,
+              path: "/account",
+            },
+            {
+              title: "Notifications",
+              icon: Bell,
+              path: "/notifications",
+            },
+          ]}
+          onLogout={props.onLogout}
+        />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

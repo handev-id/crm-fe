@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  CreditCard,
-  MoreVertical,
-  LogOut,
-  Bell,
-  UserRound,
-} from "lucide-react";
+import { MoreVertical, LogOut, LucideProps } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -24,17 +18,28 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { useNavigate } from "react-router-dom";
+import { User } from "@/api/models/user";
+import { Attachment } from "@/api/models/attachment";
+import { getFullName } from "@/hooks/use-user";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+interface Props {
+  user: User;
+  onLogout: () => void;
+  menus: {
+    icon: ForwardRefExoticComponent<
+      Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+    >;
+    title: string;
+    path: string;
+  }[];
+}
+
+export function NavUser({ user, menus = [], onLogout }: Props) {
+  const navigate = useNavigate();
   const { isMobile } = useSidebar();
+  console.log("avatar url:", (user.avatar as Attachment)?.url);
 
   return (
     <SidebarMenu>
@@ -49,14 +54,19 @@ export function NavUser({
               "
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage
+                  src={(user.avatar as Attachment)?.url}
+                  alt={user.firstName}
+                />
                 <AvatarFallback className="rounded-lg">
-                  {user.name?.charAt(0)}
+                  {getFullName(user.firstName, user.lastName).charAt(0)}
                 </AvatarFallback>
               </Avatar>
 
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">
+                  {getFullName(user.firstName, user.lastName)}
+                </span>
 
                 <span className="text-muted-foreground truncate text-xs">
                   {user.email}
@@ -82,14 +92,19 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage
+                    src={(user.avatar as Attachment)?.url}
+                    alt={user.firstName}
+                  />
                   <AvatarFallback className="rounded-lg">
-                    {user.name?.charAt(0)}
+                    {getFullName(user.firstName, user.lastName).charAt(0)}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">
+                    {getFullName(user.firstName, user.lastName)}
+                  </span>
                   <span className="text-muted-foreground truncate text-xs">
                     {user.email}
                   </span>
@@ -100,25 +115,17 @@ export function NavUser({
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <UserRound className="size-4 text-inherit" />
-                Account
-              </DropdownMenuItem>
-
-              <DropdownMenuItem>
-                <CreditCard className="size-4 text-inherit" />
-                Billing
-              </DropdownMenuItem>
-
-              <DropdownMenuItem>
-                <Bell className="size-4 text-inherit" />
-                Notifications
-              </DropdownMenuItem>
+              {menus.map((menu) => (
+                <DropdownMenuItem onClick={() => navigate(menu.path)}>
+                  <menu.icon className="size-4 text-inherit" />
+                  {menu.title}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem variant="destructive">
+            <DropdownMenuItem variant="destructive" onClick={onLogout}>
               <LogOut className="size-4 text-inherit" />
               Log out
             </DropdownMenuItem>

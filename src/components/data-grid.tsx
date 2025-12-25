@@ -282,7 +282,7 @@ export function DataGrid<T>({
                     colSpan={columns.length}
                     className="px-6 py-8 text-center text-gray-500"
                   >
-                    Belum ada data
+                    No data found
                   </td>
                 </tr>
               )}
@@ -292,11 +292,10 @@ export function DataGrid<T>({
       </div>
 
       {totalPages > 1 && (
-        <Pagination>
+        <Pagination className="mt-4">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                href="#"
                 onClick={() => {
                   if (page > 0) {
                     setPage(page - 1);
@@ -309,8 +308,7 @@ export function DataGrid<T>({
             {Array.from({ length: totalPages }).map((_, i) => (
               <PaginationItem key={i}>
                 <PaginationLink
-                  href="#"
-                  isActive={page === i}
+                  className={`${page === i ? "bg-primary text-white" : ""}`}
                   onClick={() => {
                     setPage(i);
                     onPageChanged?.(i + 1);
@@ -323,7 +321,6 @@ export function DataGrid<T>({
 
             <PaginationItem>
               <PaginationNext
-                href="#"
                 onClick={() => {
                   if (page < totalPages - 1) {
                     setPage(page + 1);

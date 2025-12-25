@@ -1,3 +1,5 @@
+import { Attachment } from "./attachment";
+
 export type User = {
   id: number;
   firstName: string;
@@ -5,24 +7,9 @@ export type User = {
   username: string;
   email: string;
   phone?: string;
-  avatar?: any;
-  gender?: string;
-  placeOfBirth?: string;
-  dateOfBirth?: string;
-  nationality?: string;
-  maritalStatus?: string;
-  religion?: string;
-  emergencyContactName?: string;
-  emergencyContactNumber?: string;
-  country?: string;
-  state?: string;
-  city?: string;
-  fullAddress?: string;
-  instagram?: string;
-  facebook?: string;
-  linkedin?: string;
-  x?: string;
+  avatar?: File | Attachment;
   password: string;
+  roles?: number[];
   token?: string;
   lastLogin?: string;
   deletedAt?: string;

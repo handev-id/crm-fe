@@ -109,7 +109,7 @@ export const useApi = <T, P>({
               reject(e);
               const error = e as AxiosError;
               const data = error.response?.data as { message?: string };
-              const msg = data?.message || "Something went wrong";
+              const msg = data?.message || "";
 
               toast.error(`${msg} - (${error.response?.status ?? 500})`);
               return;

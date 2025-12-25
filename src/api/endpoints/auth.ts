@@ -19,3 +19,7 @@ export function checkTokenApi({ token }: { token: string }): Promise<User> {
     })
     .then((response) => response.data);
 }
+
+export function logoutApi() {
+  return service.delete("/auth/logout").then((response) => response.data);
+}
