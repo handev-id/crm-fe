@@ -9,7 +9,7 @@ export type User = {
   phone?: string;
   avatar?: File | Attachment;
   password: string;
-  roles?: number[];
+  roles: number[];
   token?: string;
   lastLogin?: string;
   deletedAt?: string;

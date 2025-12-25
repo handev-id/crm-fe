@@ -15,4 +15,19 @@ export function getFullName(firstName: string, lastName?: string): string {
   return lastName ? `${firstName} ${lastName}` : firstName;
 }
 
+export const userRoles = [
+  {
+    value: 1,
+    label: "Super Admin",
+  },
+  {
+    value: 2,
+    label: "Admin",
+  },
+  {
+    value: 3,
+    label: "Agent",
+  },
+];
+
 export default useUser;

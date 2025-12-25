@@ -107,11 +107,21 @@ export const useApi = <T, P>({
               setIsLoading(false);
               onFail(e, ...props);
               reject(e);
-              const error = e as AxiosError;
-              const data = error.response?.data as { message?: string };
-              const msg = data?.message || "";
 
-              toast.error(`${msg} - (${error.response?.status ?? 500})`);
+              const error = e as AxiosError<any>;
+              const status = error.response?.status ?? 500;
+
+              const data = error.response?.data;
+
+              let msg = "Something went wrong";
+
+              if (data?.errors && Array.isArray(data.errors)) {
+                msg = data.errors.map((err: any) => err.message).join(", ");
+              } else if (data?.message) {
+                msg = data.message;
+              }
+
+              toast.error(`${msg} (${status})`);
               return;
             }
 
