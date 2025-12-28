@@ -9,7 +9,6 @@ import { Attachment } from "@/api/models/attachment";
 import { User } from "@/api/models/user";
 import { DataGrid } from "@/components/data-grid";
 import { Modal } from "@/components/modal";
-import { BaseSelect } from "@/components/select";
 import { AvatarUpload } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,10 +16,11 @@ import useConfirm from "@/hooks/use-alert";
 import useModal from "@/hooks/use-modal";
 import useQueryParams from "@/hooks/use-queryparams";
 import { userRoles } from "@/hooks/use-user";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { MultiSelect } from "@/components/form/multi-select";
 
 export default function SettingUser() {
   const queryParams = useQueryParams();
@@ -162,7 +162,10 @@ export default function SettingUser() {
         ]}
         limit={userIndex.data?.meta.perPage}
         buttons={
-          <Button onClick={() => userModal.setOpen(true)}>Tambah</Button>
+          <Button onClick={() => userModal.setOpen(true)}>
+            <Plus />
+            Add User
+          </Button>
         }
         loading={userIndex.isLoading}
         pageTotal={userIndex.data?.meta.lastPage}
@@ -183,81 +186,78 @@ export default function SettingUser() {
             defaultAvatar={(watch("avatar") as Attachment)?.url}
           />
 
-          <div>
-            <h4 className="mb-3 text-sm font-semibold text-muted-foreground">
-              Basic Information
-            </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              label="First Name"
+              {...register("firstName", {
+                required: "First name is required",
+              })}
+              placeholder="Enter first name"
+              message={errors.firstName?.message}
+            />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="First Name"
-                {...register("firstName", {
-                  required: "First name is required",
-                })}
-                placeholder="Enter first name"
-                message={errors.firstName?.message}
-              />
+            <Input
+              label="Last Name"
+              {...register("lastName")}
+              placeholder="Enter last name"
+            />
 
-              <Input
-                label="Last Name"
-                {...register("lastName")}
-                placeholder="Enter last name"
-              />
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  label="Phone"
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="628123456789"
+                  value={value || ""}
+                  onChange={(e) => {
+                    onChange(e.target.value);
+                  }}
+                  className="flex-1"
+                />
+              )}
+            />
 
-              <Input
-                label="Phone"
-                {...register("phone")}
-                placeholder="Enter phone number"
-              />
+            <Input
+              label="Email"
+              type="email"
+              {...register("email")}
+              placeholder="Enter email"
+            />
 
-              <Input
-                label="Email"
-                type="email"
-                {...register("email")}
-                placeholder="Enter email"
-              />
+            <Controller
+              control={control}
+              name="roles"
+              render={({ field, fieldState }) => (
+                <MultiSelect
+                  label="Roles"
+                  options={userRoles}
+                  value={field.value}
+                  onChange={field.onChange}
+                  isMulti
+                  placeholder="Select roles"
+                  message={fieldState.error?.message}
+                />
+              )}
+            />
+            <Input
+              label="Username"
+              {...register("username", {
+                required: "Username is required",
+              })}
+              placeholder="Enter username"
+              message={errors.username?.message}
+            />
 
-              <Controller
-                control={control}
-                name="roles"
-                render={({ field, fieldState }) => (
-                  <BaseSelect
-                    label="Roles"
-                    options={userRoles}
-                    value={field.value}
-                    onChange={field.onChange}
-                    isMulti
-                    placeholder="Select roles"
-                    message={fieldState.error?.message}
-                  />
-                )}
-              />
-            </div>
-          </div>
-
-          <div>
-            <h4 className="mb-3 text-sm font-semibold text-muted-foreground">
-              Account Information
-            </h4>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="Username"
-                {...register("username", {
-                  required: "Username is required",
-                })}
-                placeholder="Enter username"
-                message={errors.username?.message}
-              />
-
-              <Input
-                label="Password"
-                type="password"
-                {...register("password")}
-                placeholder="Enter password"
-                message={errors.password?.message}
-              />
-            </div>
+            <Input
+              label="Password"
+              type="password"
+              {...register("password")}
+              placeholder="Enter password"
+              message={errors.password?.message}
+            />
           </div>
 
           {/* Footer */}

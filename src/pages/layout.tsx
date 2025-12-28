@@ -44,7 +44,7 @@ export default function Layout() {
           {
             transports: ["websocket"],
             auth: {
-              token: bearerAuth,
+              token: token,
             },
           }
         );

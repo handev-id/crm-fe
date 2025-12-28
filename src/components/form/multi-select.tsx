@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Command, CommandGroup, CommandItem } from "./ui/command";
-import { Button } from "./ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Command, CommandGroup, CommandItem } from "../ui/command";
+import { Button } from "../ui/button";
 
 export type OptionType = {
   label: string;
@@ -19,9 +19,10 @@ interface Props {
   message?: string;
   disabled?: boolean;
   isMulti?: boolean;
+  popoverClassName?: string;
 }
 
-export function BaseSelect({
+export function MultiSelect({
   label,
   options,
   value,
@@ -30,6 +31,7 @@ export function BaseSelect({
   message,
   disabled,
   isMulti = false,
+  popoverClassName = "w-[190px]",
 }: Props) {
   // @ts-ignore
   const values = React.useMemo<(string | number)[]>(() => {
@@ -56,27 +58,35 @@ export function BaseSelect({
 
   return (
     <div className="w-full space-y-1.5">
-      {label && <label className="text-sm font-medium">{label}</label>}
+      {label && (
+        <label className="text-sm font-medium text-foreground">{label}</label>
+      )}
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={disabled}
-            className={cn(
-              "w-full justify-between",
-              message && "border-destructive"
-            )}
-          >
-            <span className="truncate text-left">
-              {selectedLabels || placeholder}
-            </span>
-            <ChevronDown className="h-4 w-4 opacity-50" />
-          </Button>
+          <div className="w-full">
+            <Button
+              type="button"
+              disabled={disabled}
+              variant="outline"
+              className={cn(
+                "w-full justify-between py-5 mt-1 border-input bg-transparent",
+                message && "border-destructive"
+              )}
+            >
+              <span className="truncate text-left">
+                {selectedLabels || placeholder}
+              </span>
+              <ChevronDown className="h-4 w-4 opacity-50" />
+            </Button>
+          </div>
         </PopoverTrigger>
 
-        <PopoverContent className="w-full p-0">
+        <PopoverContent
+          align="start"
+          sideOffset={4}
+          className={`${popoverClassName} p-1 border-input`}
+        >
           <Command>
             <CommandGroup>
               {options.map((option) => {
@@ -86,14 +96,24 @@ export function BaseSelect({
                   <CommandItem
                     key={option.value}
                     onSelect={() => toggleValue(option.value)}
+                    className="px-2 py-0"
                   >
-                    <Check
+                    <div
                       className={cn(
-                        "mr-2 h-4 w-4",
-                        checked ? "opacity-100" : "opacity-0"
+                        "flex w-full items-center justify-between gap-2 py-2",
+                        "border-b border-border",
+                        "last:border-b-0"
                       )}
-                    />
-                    {option.label}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4 shrink-0",
+                          checked ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+
+                      <span className="truncate">{option.label}</span>
+                    </div>
                   </CommandItem>
                 );
               })}

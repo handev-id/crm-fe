@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useEffect } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -14,9 +15,15 @@ interface Props {
     open: boolean;
     setOpen: (v: boolean) => void;
   };
+  onClose?: () => void;
 }
 
-export function Modal({ children, title, description, modal }: Props) {
+export function Modal({ children, title, description, modal, onClose }: Props) {
+  useEffect(() => {
+    if (!modal.open && onClose) {
+      onClose();
+    }
+  }, [modal.open]);
   return (
     <Dialog open={modal.open} onOpenChange={modal.setOpen}>
       <DialogContent className="sm:max-w-md">
