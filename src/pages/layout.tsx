@@ -3,19 +3,8 @@ import { checkTokenApi, logoutApi } from "@/api/endpoints/auth";
 import service from "@/api/service";
 import { AppSidebar } from "@/components/app-sidebar";
 import LoadingPage from "@/components/loading-page";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import useHandleMessage from "@/hooks/use-handle-message";
 import useSocket from "@/hooks/use-socket";
 import useUser from "@/hooks/use-user";
 import { useEffect, useState } from "react";
@@ -31,6 +20,9 @@ export default function Layout() {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
   const token = cookies.token;
+
+  // handle message
+  useHandleMessage();
 
   const checkToken = useApi({
     api: checkTokenApi,
@@ -92,25 +84,7 @@ export default function Layout() {
         user={user!}
       />
       <SidebarInset>
-        <header className="flex sticky top-0 z-40  h-16 shrink-0 items-center shadow bg-white gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
-        <div className="p-6">
+        <div className="p-2">
           <Outlet />
         </div>
       </SidebarInset>

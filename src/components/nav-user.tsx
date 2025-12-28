@@ -39,7 +39,6 @@ interface Props {
 export function NavUser({ user, menus = [], onLogout }: Props) {
   const navigate = useNavigate();
   const { isMobile } = useSidebar();
-  console.log("avatar url:", (user.avatar as Attachment)?.url);
 
   return (
     <SidebarMenu>
